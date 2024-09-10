@@ -1,5 +1,7 @@
 package com.example.avito.presenter.auth
 
+import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,25 +31,42 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.avito.presenter.navigation.Screens
+import com.example.avito.ui.theme.Gray
 
 @Composable
-fun SignInScreen() {
-    var email by rememberSaveable { mutableStateOf("") }
-    var emailError by rememberSaveable { mutableStateOf<String?>(null) }
+fun SignInScreen(navController: NavController) {
 
-    val emailPattern = Regex("^[A-Za-z0-9+_.-]+@(.+)$")
-    var password by rememberSaveable { mutableStateOf(("")) }
+    val context = LocalContext.current
+    val authViewModel: AuthViewModel = viewModel(context as ComponentActivity)
+
+    val email by authViewModel.email
+    val emailError by authViewModel.emailError
+
+    val password by authViewModel.password
+    val passwordError by authViewModel.passwordError
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val visualTransformation: VisualTransformation =
         if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
 
     val isKeyboardOpen by keyboardAsState()
+
+    var errorSignIn by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var errorMessage by rememberSaveable {
+        mutableStateOf("")
+    }
 
     Scaffold(
 
@@ -73,24 +93,23 @@ fun SignInScreen() {
                 OutlinedTextField(
                     value = email,
                     onValueChange = {
-                        email = it
-                        emailError =
-                            if (emailPattern.matches(it)) null else "Invalid email address"
+                        authViewModel.changeEmail(it)
                     },
                     label = { Text("Телефон или почта") },
-                    isError = emailError != null,
+                    isError = emailError,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     placeholder = { Text("Введите почту") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                     visualTransformation = VisualTransformation.None,
+                    colors = OutlinedTextFieldDefaults.colors().copy(cursorColor = Gray)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { newPassword -> password = newPassword },
+                    onValueChange = { authViewModel.changePassword(it) },
                     label = { Text("Пароль") },
                     visualTransformation = visualTransformation,
                     modifier = Modifier.fillMaxWidth(),
@@ -105,8 +124,13 @@ fun SignInScreen() {
                             Icon(imageVector = image, contentDescription = null)
                         }
                     },
-                    isError = password.isEmpty()
+                    colors = OutlinedTextFieldDefaults.colors().copy(cursorColor = Gray),
+                    isError = passwordError
                 )
+
+                if(errorSignIn){
+                    Text(text = errorMessage)
+                }
             }
 
             TextButton(
@@ -118,7 +142,19 @@ fun SignInScreen() {
                     )
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth(),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    authViewModel.signIn(
+                        onSuccess = {
+                            errorSignIn = false
+                            Toast.makeText(context, "Выполняется вход", Toast.LENGTH_SHORT).show()
+                            //navController.navigate(Screens.MainScreen.route)
+                        },
+                        onError = { message ->
+                            errorSignIn = true
+                            errorMessage = message
+                        }
+                    )
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
