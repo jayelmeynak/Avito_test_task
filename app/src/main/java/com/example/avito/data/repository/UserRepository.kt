@@ -2,11 +2,11 @@ package com.example.avito.data.repository
 
 import com.example.avito.data.network.models.auth.LogInRequest
 import com.example.avito.data.network.models.auth.SignInRequest
-import com.example.avito.data.network.retrofit.AuthApiFactory
+import com.example.avito.data.network.retrofit.ApiFactory
 import com.example.avito.data.network.retrofit.utils.getErrorResponse
 
 class UserRepository {
-    private val apiService = AuthApiFactory.apiService
+    private val apiService = ApiFactory.apiService
 
     suspend fun logInUser(user: LogInRequest): Result<Unit> {
         return try {

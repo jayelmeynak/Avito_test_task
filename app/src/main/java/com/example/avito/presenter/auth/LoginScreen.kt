@@ -182,7 +182,7 @@ fun LoginScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         modifier = Modifier.clickable {
-                            //navController.navigate(Screens.SignInScreen.route)
+                            navController.navigate(Screens.SignInScreen.route)
                         },
                         text = "Войти",
                         color = Blue

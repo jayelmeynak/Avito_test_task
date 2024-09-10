@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object AuthApiFactory {
+object ApiFactory {
 
     private const val BASE_URL = "https://fakeshopapi-l2ng.onrender.com/"
 
