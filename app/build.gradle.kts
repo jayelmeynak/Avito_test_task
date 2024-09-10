@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.navigation.compose)

@@ -14,11 +14,11 @@ import kotlinx.coroutines.launch
 class ProductViewModel : ViewModel() {
     private val repository = ProductsRepository()
 
-    private val list = repository.getAllProducts()
+    //private val list = repository.getAllProducts()
 
-    private val _products = MutableLiveData(list)
-    val products: LiveData<List<Product>>
-        get() = _products
+//    private val _products = MutableLiveData(list)
+//    val products: LiveData<List<Product>>
+//        get() = _products
 
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product>
