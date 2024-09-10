@@ -1,10 +1,10 @@
-package com.example.avito.data.network.model
+package com.example.avito.data.network.models.product
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class ProductDto(
     @SerializedName("__v")
-    val __v: Int,
+    val v: Int,
     @SerializedName("_id")
     val id: String,
     @SerializedName("brand")
@@ -14,7 +14,7 @@ data class Data(
     @SerializedName("description")
     val description: String,
     @SerializedName("discounted_price")
-    val discounted_price: Int,
+    val discountedPrice: Int,
     @SerializedName("images")
     val images: List<String>,
     @SerializedName("name")
@@ -22,7 +22,7 @@ data class Data(
     @SerializedName("price")
     val price: Int,
     @SerializedName("product_rating")
-    val product_rating: Double,
+    val productRating: Double,
     @SerializedName("product_specifications")
-    val product_specifications: List<ProductSpecification>
+    val productSpecifications: List<ProductSpecificationDto>
 )
