@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.avito.presenter.navigation.Screens
 import com.example.avito.ui.theme.Gray
 import com.example.avito.ui.theme.Purple40
 
@@ -143,11 +144,8 @@ fun SignInScreen(navController: NavController) {
                         onSuccess = {
                             errorSignIn = false
                             Toast.makeText(context, "Выполняется вход", Toast.LENGTH_SHORT).show()
-//                            navController.navigate(Screens.MainScreen.route) {
-//                                popUpTo(Screens.SignInScreen.route) {
-//                                    inclusive = true
-//                                }
-//                            }
+                            navController.navigate(Screens.ProductListScreen.route)
+
                         },
                         onError = { message ->
                             errorSignIn = true
