@@ -11,7 +11,7 @@ class ProductsRepository {
     private val mapper = Mapper()
 
 
-    fun getAllProducts(): Result<List<Product>> {
+    suspend fun getAllProducts(): Result<List<Product>> {
         return try {
             val response = apiService.getAllProducts()
             if (response.isSuccessful) {
