@@ -3,7 +3,8 @@ package com.example.avito.data.network.retrofit
 import com.example.avito.data.network.models.auth.LogInRequest
 import com.example.avito.data.network.models.auth.SignInRequest
 import com.example.avito.data.network.models.auth.SignInResponse
-import com.example.avito.data.network.models.product.ProductResponse
+import com.example.avito.data.network.models.product.ProductListResponseDto
+import com.example.avito.data.network.models.product.ProductResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,9 +24,9 @@ interface ApiService {
     suspend fun getProfile(@Header("Authorization") token: String): Response<Unit>
 
     @GET("app/v1/products/{product_id}")
-    suspend fun getProduct(@Path("product_id") productId: String): ProductResponse
+    suspend fun getProduct(@Path("product_id") productId: String): ProductResponseDto
 
     @GET("app/v1/products")
-    fun getAllProducts(): List<ProductResponse>
+    fun getAllProducts(): Response<ProductListResponseDto>
 
 }
