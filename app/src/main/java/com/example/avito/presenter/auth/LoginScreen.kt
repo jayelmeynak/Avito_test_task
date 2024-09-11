@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import com.example.avito.presenter.navigation.Screens
 import com.example.avito.ui.theme.Blue
 import com.example.avito.ui.theme.Gray
+import com.example.avito.ui.theme.Purple40
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -67,6 +68,9 @@ fun LoginScreen(navController: NavController) {
     val cPassword by authViewModel.cPassword
     val passwordError by authViewModel.cPasswordError
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
+    val error by authViewModel.error
+    val errorMessage by authViewModel.errorMessage
 
     val visualTransformation: VisualTransformation =
         if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
@@ -187,8 +191,13 @@ fun LoginScreen(navController: NavController) {
                         text = "Войти",
                         color = Blue
                     )
-
                 }
+
+                if(error){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = errorMessage)
+                }
+
             }
 
             TextButton(
@@ -202,7 +211,7 @@ fun LoginScreen(navController: NavController) {
                     .fillMaxWidth(),
                 onClick = { login(authViewModel, context, navController) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    containerColor = Purple40,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             ) {
@@ -213,8 +222,7 @@ fun LoginScreen(navController: NavController) {
 }
 
 fun login(authViewModel: AuthViewModel, context: Context, navController: NavController) {
-    if (authViewModel.emailError.value || authViewModel.passwordError.value || authViewModel.cPasswordError.value) {
-        Toast.makeText(context, "Введите корректные данные", Toast.LENGTH_SHORT).show()
+    if (authViewModel.error.value) {
         return
     } else {
         authViewModel.login(

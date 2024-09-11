@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.avito.presenter.navigation.Screens
 import com.example.avito.ui.theme.Gray
+import com.example.avito.ui.theme.Purple40
 
 @Composable
 fun SignInScreen(navController: NavController) {
@@ -60,13 +60,9 @@ fun SignInScreen(navController: NavController) {
 
     val isKeyboardOpen by keyboardAsState()
 
-    var errorSignIn by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var errorSignIn by authViewModel.error
 
-    var errorMessage by rememberSaveable {
-        mutableStateOf("")
-    }
+    var errorMessage by authViewModel.errorMessage
 
     Scaffold(
 
@@ -147,7 +143,11 @@ fun SignInScreen(navController: NavController) {
                         onSuccess = {
                             errorSignIn = false
                             Toast.makeText(context, "Выполняется вход", Toast.LENGTH_SHORT).show()
-                            //navController.navigate(Screens.MainScreen.route)
+//                            navController.navigate(Screens.MainScreen.route) {
+//                                popUpTo(Screens.SignInScreen.route) {
+//                                    inclusive = true
+//                                }
+//                            }
                         },
                         onError = { message ->
                             errorSignIn = true
@@ -156,7 +156,7 @@ fun SignInScreen(navController: NavController) {
                     )
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    containerColor = Purple40,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             ) {

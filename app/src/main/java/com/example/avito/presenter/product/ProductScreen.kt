@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.avito.domain.ProductSpecification
 import com.example.avito.ui.theme.LightSeparatorColor
@@ -56,10 +57,10 @@ import com.example.avito.ui.theme.White
 import kotlin.math.absoluteValue
 
 @Composable
-fun ProductScreen(id: String) {
+fun ProductScreen(id: String, navController: NavController) {
 
     val viewModel: ProductViewModel = viewModel(LocalContext.current as ComponentActivity)
-    viewModel.getProduct("64d7e740e03347cdf0b560d2")
+//    viewModel.getProduct("64d7e740e03347cdf0b560d2")
     val product by viewModel.product.observeAsState()
     val isProductLoaded by viewModel.isProductLoaded.collectAsState()
     var name by remember {

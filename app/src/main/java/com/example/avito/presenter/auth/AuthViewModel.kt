@@ -37,6 +37,13 @@ class AuthViewModel(application: Application): BaseViewModel(application) {
     fun onCPasswordChange(value: String) {
         _cPassword.value = value
         _cPasswordError.value = _password.value != value
+        if(_cPasswordError.value){
+            _error.value = true
+            _errorMessage.value = "Пароли не совпадают"
+        }else{
+            _error.value = false
+            _errorMessage.value = ""
+        }
     }
 
     fun signIn(onSuccess: () -> Unit, onError: (String) -> Unit) {
