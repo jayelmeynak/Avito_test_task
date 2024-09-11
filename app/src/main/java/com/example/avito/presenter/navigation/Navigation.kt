@@ -16,6 +16,7 @@ import com.example.avito.presenter.auth.AuthViewModel
 import com.example.avito.presenter.auth.LoginScreen
 import com.example.avito.presenter.auth.SignInScreen
 import com.example.avito.presenter.product.ProductScreen
+import com.example.avito.presenter.productList.ProductListScreen
 
 @Composable
 fun Navigation() {
@@ -24,7 +25,7 @@ fun Navigation() {
 
     LaunchedEffect(authViewModel.getToken()) {
         if (authViewModel.getToken() != null) {
-            navController.navigate(Screens.SignInScreen.route) {
+            navController.navigate(Screens.ProductListScreen.route) {
                 popUpTo(0)
             }
         } else {
@@ -67,6 +68,9 @@ fun Navigation() {
             if (id != null) {
                 ProductScreen(id = id, navController = navController)
             }
+        }
+        composable(Screens.ProductListScreen.route){
+            ProductListScreen(navController = navController)
         }
 
     }
