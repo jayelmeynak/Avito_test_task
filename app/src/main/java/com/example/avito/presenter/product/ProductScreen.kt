@@ -1,7 +1,6 @@
 package com.example.avito.presenter.product
 
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +41,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.avito.domain.ProductSpecification
+import com.example.avito.presenter.productList.Loading
 import com.example.avito.ui.theme.LightSeparatorColor
 import com.example.avito.ui.theme.Purple40
 import com.example.avito.ui.theme.White
@@ -59,8 +58,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun ProductScreen(id: String, navController: NavController) {
 
-    val viewModel: ProductViewModel = viewModel(LocalContext.current as ComponentActivity)
-//    viewModel.getProduct("64d7e740e03347cdf0b560d2")
+    val viewModel: ProductViewModel = viewModel()
     val product by viewModel.product.observeAsState()
     val isProductLoaded by viewModel.isProductLoaded.collectAsState()
     var name by remember {
@@ -98,13 +96,15 @@ fun ProductScreen(id: String, navController: NavController) {
                 price = prod.price
                 discountPrice = prod.discountedPrice
             }
+            viewModel.changeLoading()
         }
-
     }
-
     val pagerState = rememberPagerState(pageCount = { images.size })
 
-    if (isProductLoaded) {
+    if (viewModel.isLoading.value){
+        Loading()
+    }
+    else {
         Scaffold { innerPadding ->
             Box(
                 modifier = Modifier
