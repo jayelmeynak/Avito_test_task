@@ -17,7 +17,10 @@ class ProductListViewModel: ViewModel() {
     private val _isLoading = mutableStateOf(false)
     val isLoading: MutableState<Boolean> = _isLoading
 
-    fun getProducts() {
+    private val _category = mutableStateOf("")
+    private val _sort = mutableStateOf("")
+
+    fun getAllProducts() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -33,4 +36,78 @@ class ProductListViewModel: ViewModel() {
             }
         }
     }
+
+    fun getProductsFilterByCategory() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = repository.getProductsFilterByCategory(_category.value)
+                if (response.isSuccess) {
+                    _products.value = response.getOrNull()!!
+                    _isLoading.value = false
+                } else {
+                    _isLoading.value = false
+                }
+            } catch (e: Exception) {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun getProductsWithPriceSort() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = repository.getProductsWithPriceSort(_sort.value)
+                if (response.isSuccess) {
+                    _products.value = response.getOrNull()!!
+                    _isLoading.value = false
+                } else {
+                    _isLoading.value = false
+                }
+            } catch (e: Exception) {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun getProductsWithPriceSortAndCategory() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response =
+                    repository.getProductsWithPriceSortAndCategory(
+                        category = _category.value,
+                        sort = _sort.value
+                    )
+                if (response.isSuccess) {
+                    _products.value = response.getOrNull()!!
+                    _isLoading.value = false
+                } else {
+                    _isLoading.value = false
+                }
+            } catch (e: Exception) {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun setCategory(category: String) {
+        _category.value = category
+        if (_sort.value.isEmpty()) {
+            getProductsFilterByCategory()
+        } else {
+            getProductsWithPriceSortAndCategory()
+        }
+    }
+
+    fun setSort(sort: String) {
+        _sort.value = sort
+        if (_category.value.isEmpty()) {
+            getProductsWithPriceSort()
+        } else {
+            getProductsWithPriceSortAndCategory()
+        }
+    }
+
 }

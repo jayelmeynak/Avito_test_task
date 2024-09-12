@@ -42,7 +42,7 @@ fun ProductListScreen(navController: NavController) {
     val viewModel: ProductListViewModel = viewModel(LocalContext.current as ComponentActivity)
     LaunchedEffect(Unit) {
         if (viewModel.products.value.isEmpty()) {
-            viewModel.getProducts()
+            viewModel.getAllProducts()
         }
     }
     if (viewModel.isLoading.value) {
