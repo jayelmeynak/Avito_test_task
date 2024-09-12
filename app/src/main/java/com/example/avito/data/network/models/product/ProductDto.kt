@@ -10,7 +10,7 @@ data class ProductDto(
     @SerializedName("category")
     val category: List<String>,
     @SerializedName("description")
-    val description: String,
+    val description: String?,
     @SerializedName("price")
     val price: Int,
     @SerializedName("discounted_price")

@@ -90,7 +90,7 @@ fun ProductScreen(id: String, navController: NavController) {
         if (isProductLoaded) {
             product?.let { prod ->
                 name = prod.name
-                description = prod.description
+                description = prod.description ?: ""
                 images = prod.images
                 specification = prod.productSpecifications
                 price = prod.price
