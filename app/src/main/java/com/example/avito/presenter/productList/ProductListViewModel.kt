@@ -4,7 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.avito.R
 import com.example.avito.data.repository.ProductsRepository
+import com.example.avito.domain.Category
 import com.example.avito.domain.Product
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,16 @@ class ProductListViewModel: ViewModel() {
 
     private val _category = mutableStateOf("")
     private val _sort = mutableStateOf("")
+
+    private val _activeCategory = mutableStateOf(-1)
+
+
+    val categoryList = listOf(
+        Category(R.drawable.ic_footwear, "footwear", "Обувь"),
+        Category(R.drawable.ic_clothing, "clothing", "Одежда"),
+        Category(R.drawable.ic_furniture, "furniture", "Мебель"),
+        Category(R.drawable.ic_computer, "computers", "Компьтерная техника"),
+    )
 
     fun getAllProducts() {
         viewModelScope.launch {
@@ -92,12 +104,17 @@ class ProductListViewModel: ViewModel() {
         }
     }
 
-    fun setCategory(category: String) {
-        _category.value = category
-        if (_sort.value.isEmpty()) {
-            getProductsFilterByCategory()
-        } else {
-            getProductsWithPriceSortAndCategory()
+    fun setCategory(category: String, index: Int) {
+        _activeCategory.value = if (_activeCategory.value == index) -1 else index
+        _category.value = if (_activeCategory.value == -1) "" else category
+        if (_category.value.isNotEmpty()) {
+            if (_sort.value.isEmpty()) {
+                getProductsFilterByCategory()
+            } else {
+                getProductsWithPriceSortAndCategory()
+            }
+        }else{
+            getAllProducts()
         }
     }
 
