@@ -106,13 +106,13 @@ fun CategoryRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = innerPadding.calculateTopPadding() + 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         categoryList.forEachIndexed { index, category ->
             Image(
                 modifier = Modifier
                     .size(70.dp)
-                    .clip(RoundedCornerShape(5.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.background)
                     .clickable {
                         onClickCategory(category.categoryName, index)
@@ -141,13 +141,13 @@ fun CardProduct(product: Product, navController: NavController) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(text = product.name)
+            Text(text = product.name, fontSize = 11.sp)
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = "${product.discountedPrice} ₽",
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
 
             Spacer(modifier = Modifier.height(1.dp))
@@ -156,7 +156,7 @@ fun CardProduct(product: Product, navController: NavController) {
 
                 Text(
                     text = "${product.price} ₽",
-                    fontSize = 14.sp,
+                    fontSize = 11.sp,
                     textDecoration = TextDecoration.LineThrough
                 )
             }
@@ -184,9 +184,10 @@ fun ColumnScope.ProductImage(product: Product) {
             .error(R.drawable.ic_placeholder)
             .build(),
         contentDescription = "Product image",
-        contentScale = ContentScale.FillBounds,
+        contentScale = ContentScale.Fit,
         modifier = Modifier
             .size(150.dp, 200.dp)
+            .clip(RoundedCornerShape(8.dp))
             .align(Alignment.CenterHorizontally),
         imageLoader = imageLoader
     )
