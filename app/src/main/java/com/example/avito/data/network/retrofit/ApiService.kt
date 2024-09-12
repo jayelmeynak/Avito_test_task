@@ -11,6 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -28,5 +29,21 @@ interface ApiService {
 
     @GET("app/v1/products")
     suspend fun getAllProducts(): Response<ProductListResponseDto>
+
+    @GET("products")
+    suspend fun getProductsFilterByCategory(
+        @Query("category") category: String
+    ): Response<ProductListResponseDto>
+
+    @GET("products")
+    suspend fun getProductsWithPriceSort(
+        @Query("sort") sort: String
+    ): Response<ProductListResponseDto>
+
+    @GET("products")
+    suspend fun getProductsWithPriceSortAndFilterByCategory(
+        @Query("sort") sort: String,
+        @Query("category") category: String,
+    ): Response<ProductListResponseDto>
 
 }
