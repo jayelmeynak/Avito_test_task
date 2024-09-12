@@ -1,5 +1,7 @@
 package com.example.avito.presenter.product
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +16,6 @@ import kotlinx.coroutines.launch
 class ProductViewModel : ViewModel() {
     private val repository = ProductsRepository()
 
-    //private val list = repository.getAllProducts()
-
-//    private val _products = MutableLiveData(list)
-//    val products: LiveData<List<Product>>
-//        get() = _products
-
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product>
         get() = _product
@@ -27,13 +23,18 @@ class ProductViewModel : ViewModel() {
     private val _isProductLoaded = MutableStateFlow(false)
     val isProductLoaded: StateFlow<Boolean> = _isProductLoaded.asStateFlow()
 
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: MutableState<Boolean>
+        get() = _isLoading
+
     fun getProduct(id: String) {
+        _isLoading.value = true
         viewModelScope.launch {
             _product.value = repository.getProduct(id)
             _isProductLoaded.value = true
         }
     }
-    fun changeLoaded(){
-        _isProductLoaded.value = false
+    fun changeLoading(){
+        _isLoading.value = false
     }
 }
