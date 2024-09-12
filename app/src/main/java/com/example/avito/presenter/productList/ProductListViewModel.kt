@@ -31,6 +31,8 @@ class ProductListViewModel : ViewModel() {
 
     val expanded = mutableStateOf(false)
 
+    var errorMessage = mutableStateOf<String?>(null)
+
 
     val categoryList = listOf(
         Category(R.drawable.ic_footwear, "footwear", "Обувь"),
@@ -47,11 +49,14 @@ class ProductListViewModel : ViewModel() {
                 if (response.isSuccess) {
                     _products.value = response.getOrNull()!!
                     _isLoading.value = false
+                    errorMessage.value = null
                 } else {
                     _isLoading.value = false
+                    errorMessage.value = response.exceptionOrNull()?.localizedMessage ?: "Ошибка"
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
+                errorMessage.value = e.localizedMessage
             }
         }
     }
@@ -64,11 +69,14 @@ class ProductListViewModel : ViewModel() {
                 if (response.isSuccess) {
                     _products.value = response.getOrNull()!!
                     _isLoading.value = false
+                    errorMessage.value = null
                 } else {
                     _isLoading.value = false
+                    errorMessage.value = response.exceptionOrNull()?.message.toString()
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
+                errorMessage.value = e.message
             }
         }
     }
@@ -81,11 +89,14 @@ class ProductListViewModel : ViewModel() {
                 if (response.isSuccess) {
                     _products.value = response.getOrNull()!!
                     _isLoading.value = false
+                    errorMessage.value = null
                 } else {
                     _isLoading.value = false
+                    errorMessage.value = response.exceptionOrNull()?.message.toString()
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
+                errorMessage.value = e.message
             }
         }
     }
@@ -102,11 +113,14 @@ class ProductListViewModel : ViewModel() {
                 if (response.isSuccess) {
                     _products.value = response.getOrNull()!!
                     _isLoading.value = false
+                    errorMessage.value = null
                 } else {
                     _isLoading.value = false
+                    errorMessage.value = response.exceptionOrNull()?.message.toString()
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
+                errorMessage.value = e.message
             }
         }
     }

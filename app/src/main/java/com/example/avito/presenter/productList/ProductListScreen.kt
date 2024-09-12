@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -30,12 +31,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,14 +57,15 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun ProductListScreen(navController: NavController) {
     val viewModel: ProductListViewModel = viewModel(LocalContext.current as ComponentActivity)
+    val errorMessage by viewModel.errorMessage
     LaunchedEffect(Unit) {
         if (viewModel.products.value.isEmpty()) {
             viewModel.getAllProducts()
         }
     }
-    if (viewModel.isLoading.value) {
+    if (viewModel.isLoading.value && viewModel.products.value.isEmpty()) {
         Loading()
-    } else {
+    } else if (errorMessage == null) {
         ScreenContent(
             viewModel.products.value,
             navController,
@@ -75,6 +79,27 @@ fun ProductListScreen(navController: NavController) {
                 viewModel.setSort(selectedSort)
             }
         )
+    }else{
+
+        Column(
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = errorMessage!!,
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                viewModel.getAllProducts()
+            }) {
+                Text("Попробовать снова", color = MaterialTheme.colorScheme.onPrimary)
+            }
+        }
     }
 }
 
