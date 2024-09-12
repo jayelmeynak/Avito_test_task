@@ -7,6 +7,5 @@ data class Product(
     val price: Int,
     val name: String,
     val description: String?,
-    val category: List<String>,
-    val productSpecifications: List<ProductSpecification>
+    val category: List<String>
 )

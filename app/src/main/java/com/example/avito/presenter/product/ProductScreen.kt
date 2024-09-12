@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,7 +47,6 @@ import androidx.compose.ui.util.lerp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.avito.domain.ProductSpecification
 import com.example.avito.presenter.productList.Loading
 import com.example.avito.ui.theme.LightSeparatorColor
 import com.example.avito.ui.theme.Purple40
@@ -70,8 +68,8 @@ fun ProductScreen(id: String, navController: NavController) {
     var images by remember {
         mutableStateOf(listOf<String>())
     }
-    var specification by remember {
-        mutableStateOf(listOf<ProductSpecification>())
+    var category by remember {
+        mutableStateOf(listOf<String>())
     }
     var price by remember {
         mutableStateOf(0)
@@ -92,7 +90,7 @@ fun ProductScreen(id: String, navController: NavController) {
                 name = prod.name
                 description = prod.description ?: ""
                 images = prod.images
-                specification = prod.productSpecifications
+                category = prod.category
                 price = prod.price
                 discountPrice = prod.discountedPrice
             }
@@ -101,10 +99,9 @@ fun ProductScreen(id: String, navController: NavController) {
     }
     val pagerState = rememberPagerState(pageCount = { images.size })
 
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         Loading()
-    }
-    else {
+    } else {
         Scaffold { innerPadding ->
             Box(
                 modifier = Modifier
@@ -138,11 +135,12 @@ fun ProductScreen(id: String, navController: NavController) {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    item {
-                        Specification(specification)
-                        Spacer(modifier = Modifier.height(16.dp))
+                    if (category.size >= 1) {
+                        item {
+                            Category(category)
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
-
                     item {
                         Description(description)
                         Spacer(modifier = Modifier.height(16.dp))
@@ -155,6 +153,14 @@ fun ProductScreen(id: String, navController: NavController) {
     }
 }
 
+@Composable
+fun Category(category: List<String>) {
+    if (category.size > 1) {
+        Text(text = "Категории: ${category.joinToString(", ")}", color = Color.Gray)
+    } else {
+        Text(text = "Категория: ${category.joinToString(", ")}", color = Color.Gray)
+    }
+}
 
 @Composable
 fun ImageCarousel(images: List<String>, pagerState: PagerState) {
@@ -295,38 +301,6 @@ fun Description(description: String) {
     }
 }
 
-@Composable
-fun Specification(specification: List<ProductSpecification>) {
-    Column {
-        Text(
-            text = "Характеристики",
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Column {
-            specification.forEach { specification ->
-                if (specification.key == null) return@forEach
-                Row {
-                    Text(
-                        text = "${specification.key}:",
-                        color = Color.Gray,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = specification.value,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(2f)
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-        }
-    }
-}
 
 @Composable
 fun BoxScope.BuyButton(innerPadding: PaddingValues) {

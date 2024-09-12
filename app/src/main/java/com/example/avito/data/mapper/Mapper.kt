@@ -1,9 +1,7 @@
 package com.example.avito.data.mapper
 
 import com.example.avito.data.network.models.product.ProductDto
-import com.example.avito.data.network.models.product.ProductSpecificationDto
 import com.example.avito.domain.Product
-import com.example.avito.domain.ProductSpecification
 
 class Mapper {
 
@@ -15,23 +13,10 @@ class Mapper {
             price = product.price,
             name = product.name,
             description = product.description,
-            category = product.category,
-            productSpecifications = listSpecificationMapper(product.productSpecifications)
+            category = product.category
         )
     }
 
-    fun specificationDtoToEntity(specificationDto: ProductSpecificationDto): ProductSpecification {
-        return ProductSpecification(
-            key = specificationDto.key,
-            value = specificationDto.value
-        )
-    }
-
-    fun listSpecificationMapper(list: List<ProductSpecificationDto>): List<ProductSpecification> {
-        return list.map {
-            specificationDtoToEntity(it)
-        }
-    }
 
     fun listProductDtoToEntity(list: List<ProductDto>): List<Product> {
         return list.map {

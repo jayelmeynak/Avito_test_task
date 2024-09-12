@@ -17,6 +17,4 @@ data class ProductDto(
     val discountedPrice: Int,
     @SerializedName("images")
     val images: List<String>,
-    @SerializedName("product_specifications")
-    val productSpecifications: List<ProductSpecificationDto>
 )
