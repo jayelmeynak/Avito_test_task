@@ -30,17 +30,17 @@ interface ApiService {
     @GET("app/v1/products")
     suspend fun getAllProducts(): Response<ProductListResponseDto>
 
-    @GET("products")
+    @GET("app/v1/products")
     suspend fun getProductsFilterByCategory(
         @Query("category") category: String
     ): Response<ProductListResponseDto>
 
-    @GET("products")
+    @GET("app/v1/products")
     suspend fun getProductsWithPriceSort(
         @Query("sort") sort: String
     ): Response<ProductListResponseDto>
 
-    @GET("products")
+    @GET("app/v1/products")
     suspend fun getProductsWithPriceSortAndFilterByCategory(
         @Query("sort") sort: String,
         @Query("category") category: String,
